@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 
 # init
 
@@ -15,5 +17,9 @@ border = [
 
 for i in border:
 	del board[i]
+
+plt.scatter(*zip(*board))
+plt.axis([-1, 7, -1, 7])
+plt.show()
 
 print(board)
