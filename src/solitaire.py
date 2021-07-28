@@ -1,30 +1,73 @@
 import matplotlib.pyplot as plt
 
 
+def display(p_board):
+	for k, v in p_board.items():
+		if v == 1:
+			plt.scatter(k[0], k[1], color='red')
+		else:
+			plt.scatter(k[0], k[1], color='white')
+
+	plt.axis([-1, 7, -1, 7])
+	plt.show()
+
+def init_board():
+	board = dict()
+	for x in range(7):
+		for y in range(7):
+			board[(x, y)] = 1
+
+	border = [
+		(0, 0), (0, 1), (1,0),
+		(6, 6), (6, 5), (5, 6),
+		(0, 5), (0, 6), (1, 6),
+		(5, 0), (6, 0), (6, 1)
+		]
+	for i in border:
+		del board[i]
+
+	return board
+
+
 # init
 
-board = dict()
-for x in range(7):
-	for y in range(7):
-		board[(x, y)] = 1
+board = init_board()
 
-border = [
-	(0, 0), (0, 1), (1,0),
-	(6, 6), (6, 5), (5, 6),
-	(0, 5), (0, 6), (1, 6),
-	(5, 0), (6, 0), (6, 1)
-	]
+# round 0
 
-for i in border:
-	del board[i]
+board[(3, 3)] = 0
+
+# rounds
+
+moves = []
 
 for k, v in board.items():
-	if v == 1:
-		plt.scatter(k[0], k[1], color='red')
+	if v == 0:
+		continue
 	else:
-		plt.scatter(k[0], k[1], color='white')
+		slot = board.get((int(k[0]), int(k[1]) + 1))
+		if slot is not None and slot == 1:
+			slot = board.get((k[0], k[1] + 2))
+			if slot is not None and slot == 0:
+				moves.append((k, (k[0], k[1] + 2)))
 
-plt.axis([-1, 7, -1, 7])
-# plt.show()
+		slot = board.get((int(k[0] + 1), int(k[1])))
+		if slot is not None and slot == 1:
+			slot = board.get((k[0] + 2, k[1]))
+			if slot is not None and slot == 0:
+				moves.append((k, (k[0] + 2, k[1])))
+
+		slot = board.get((int(k[0]), int(k[1]) - 1))
+		if slot is not None and slot == 1:
+			slot = board.get((k[0], k[1] - 2))
+			if slot is not None and slot == 0:
+				moves.append((k, (k[0], k[1] - 2)))
+
+		slot = board.get((int(k[0] - 1), int(k[1])))
+		if slot is not None and slot == 1:
+			slot = board.get((k[0] - 2, k[1]))
+			if slot is not None and slot == 0:
+				moves.append((k, (k[0] - 2, k[1])))
+print(moves)
 
 
