@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import random
+import copy
 
 
 def init_board():
@@ -69,14 +70,16 @@ def count_ball(p_board):
 def find_opti_moves(p_board, p_moves):
 	res_moves = []
 	possibility = 0
+	cp_board = copy.deepcopy(p_board)
 	for move in p_moves:
-		board_tmp = exec_move(p_board, move)
+		board_tmp = exec_move(cp_board, move)
 		mvs = len(find_moves(board_tmp))
 		if mvs > possibility:
 			possibility = mvs
 			res_moves = [move]
 		elif possibility == mvs:
 			res_moves.append(move)
+		cp_board = copy.deepcopy(p_board)
 	return res_moves
 
 
@@ -109,7 +112,6 @@ while remaining != 1:
 		print(remaining, end = '', flush=True)
 	elif count % 1000 == 0:
 		print(".", end = '', flush=True)
-
 
 print("VICTORY!")
 
