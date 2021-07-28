@@ -66,8 +66,22 @@ def count_ball(p_board):
 		count += v
 	return count
 
+def find_opti_moves(p_board, p_moves):
+	res_moves = []
+	possibility = 0
+	for move in p_moves:
+		board_tmp = exec_move(p_board, move)
+		mvs = len(find_moves(board_tmp))
+		if mvs > possibility:
+			possibility = mvs
+			res_moves = [move]
+		elif possibility == mvs:
+			res_moves.append(move)
+	return res_moves
+
 
 remaining = -1
+count = 0
 while remaining != 1:
 
 	# init
@@ -80,17 +94,22 @@ while remaining != 1:
 
 	# rounds
 
-	moves = find_moves(board)
+	opti_moves = find_moves(board)
+	moves = 1
 	while moves:
-		rand = random.randint(0, len(moves) - 1)
-		board = exec_move(board, moves[rand])
+		rand = random.randint(0, len(opti_moves) - 1)
+		board = exec_move(board, opti_moves[rand])
 		moves = find_moves(board)
+		opti_moves = find_opti_moves(board, moves)
 
 	remaining = count_ball(board)
+	count += 1
+
 	if remaining < 4:
-		print(remaining, end = '')
-	else:
-		print(".", end = '')
+		print(remaining, end = '', flush=True)
+	elif count % 1000 == 0:
+		print(".", end = '', flush=True)
+
 
 print("VICTORY!")
 
