@@ -24,7 +24,7 @@ def display(p_board):
 		if v == 1:
 			plt.scatter(k[0], k[1], color='red')
 		else:
-			plt.scatter(k[0], k[1], color='white')
+			plt.scatter(k[0], k[1], color='grey')
 
 	plt.axis([-1, 7, -1, 7])
 	plt.show()
@@ -60,19 +60,39 @@ def exec_move(p_board, move):
 			print("ERROR")
 	return p_board
 
-# init
+def count_ball(p_board):
+	count = 0
+	for k, v in p_board.items():
+		count += v
+	return count
 
-board = init_board()
 
-# round 0
+remaining = -1
+while remaining != 1:
 
-board[(3, 3)] = 0
+	# init
 
-# rounds
+	board = init_board()
 
-moves = find_moves(board)
-rand = random.randint(0, len(moves) - 1)
-board = exec_move(board, moves[rand])
-display(board)
+	# round 0
+
+	board[(3, 3)] = 0
+
+	# rounds
+
+	moves = find_moves(board)
+	while moves:
+		rand = random.randint(0, len(moves) - 1)
+		board = exec_move(board, moves[rand])
+		moves = find_moves(board)
+
+	remaining = count_ball(board)
+	if remaining < 4:
+		print(remaining, end = '')
+	else:
+		print(".", end = '')
+
+print("VICTORY!")
+
 
 
