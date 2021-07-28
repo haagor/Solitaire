@@ -40,34 +40,18 @@ board[(3, 3)] = 0
 # rounds
 
 moves = []
-
+direction =[(0, 1), (1, 0), (0, -1), (-1, 0)]
 for k, v in board.items():
 	if v == 0:
 		continue
 	else:
-		slot = board.get((int(k[0]), int(k[1]) + 1))
-		if slot is not None and slot == 1:
-			slot = board.get((k[0], k[1] + 2))
-			if slot is not None and slot == 0:
-				moves.append((k, (k[0], k[1] + 2)))
+		for i in direction:
+			slot = board.get((int(k[0] + i[0]), int(k[1]) + i[1]))
+			if slot is not None and slot == 1:
+				slot = board.get((k[0] + i[0] * 2, k[1] + i[1] * 2))
+				if slot is not None and slot == 0:
+					moves.append((k, (k[0] + i[0] * 2, k[1] + i[1] * 2)))
 
-		slot = board.get((int(k[0] + 1), int(k[1])))
-		if slot is not None and slot == 1:
-			slot = board.get((k[0] + 2, k[1]))
-			if slot is not None and slot == 0:
-				moves.append((k, (k[0] + 2, k[1])))
-
-		slot = board.get((int(k[0]), int(k[1]) - 1))
-		if slot is not None and slot == 1:
-			slot = board.get((k[0], k[1] - 2))
-			if slot is not None and slot == 0:
-				moves.append((k, (k[0], k[1] - 2)))
-
-		slot = board.get((int(k[0] - 1), int(k[1])))
-		if slot is not None and slot == 1:
-			slot = board.get((k[0] - 2, k[1]))
-			if slot is not None and slot == 0:
-				moves.append((k, (k[0] - 2, k[1])))
 print(moves)
 
 
