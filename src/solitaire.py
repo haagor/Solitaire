@@ -18,8 +18,13 @@ border = [
 for i in border:
 	del board[i]
 
-plt.scatter(*zip(*board))
-plt.axis([-1, 7, -1, 7])
-plt.show()
+for k, v in board.items():
+	if v == 1:
+		plt.scatter(k[0], k[1], color='red')
+	else:
+		plt.scatter(k[0], k[1], color='white')
 
-print(board)
+plt.axis([-1, 7, -1, 7])
+# plt.show()
+
+
