@@ -82,13 +82,29 @@ def find_opti_moves(p_board, p_moves):
 		cp_board = copy.deepcopy(p_board)
 	return res_moves
 
+def find_no_suicide_moves(p_board, p_moves):
+	res_moves = []
+	possibility = 0
+	cp_board = copy.deepcopy(p_board)
+	if count_ball(cp_board) == 2:
+		return p_moves
+	for move in p_moves:
+		board_tmp = exec_move(cp_board, move)
+		mvs = len(find_moves(board_tmp))
+		if mvs > 0:
+			res_moves.append(move)
+		cp_board = copy.deepcopy(p_board)
+	return res_moves
+
 
 remaining = -1
 count = 0
+memory_moves = []
 while remaining != 1:
 
 	# init
 
+	memory_moves = []
 	board = init_board()
 
 	# round 0
@@ -99,11 +115,14 @@ while remaining != 1:
 
 	opti_moves = find_moves(board)
 	moves = 1
-	while moves:
+	while moves and opti_moves:
 		rand = random.randint(0, len(opti_moves) - 1)
 		board = exec_move(board, opti_moves[rand])
+		memory_moves.append(opti_moves[rand])
 		moves = find_moves(board)
-		opti_moves = find_opti_moves(board, moves)
+		opti_moves = moves
+		if remaining < 16:
+			opti_moves = find_no_suicide_moves(board, moves)
 
 	remaining = count_ball(board)
 	count += 1
@@ -114,6 +133,7 @@ while remaining != 1:
 		print(".", end = '', flush=True)
 
 print("VICTORY!")
+print(memory_moves)
 
 
 
