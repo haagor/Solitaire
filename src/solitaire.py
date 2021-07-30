@@ -109,20 +109,18 @@ while remaining != 1:
 
 	# round 0
 
-	board[(3, 3)] = 0
+	board[(3, 4)] = 0
 
 	# rounds
 
 	opti_moves = find_moves(board)
 	moves = 1
-	while moves and opti_moves:
+	while moves:
 		rand = random.randint(0, len(opti_moves) - 1)
 		board = exec_move(board, opti_moves[rand])
 		memory_moves.append(opti_moves[rand])
 		moves = find_moves(board)
-		opti_moves = moves
-		if remaining < 16:
-			opti_moves = find_no_suicide_moves(board, moves)
+		opti_moves = find_opti_moves(board, moves)
 
 	remaining = count_ball(board)
 	count += 1
